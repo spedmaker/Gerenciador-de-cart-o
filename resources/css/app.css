@@ -1,0 +1,76 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'tom-select/dist/css/tom-select.bootstrap5.css';
+
+body {
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    min-height: 100vh;
+    background-color: #1e293b;
+}
+
+.sidebar .nav-link {
+    color: #94a3b8;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: rgba(255,255,255,0.08);
+    border-radius: 6px;
+}
+
+.sidebar .brand-title {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+.badge-installment {
+    font-size: .7rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.03);
+}
+
+.category-badge {
+    font-size: .75rem;
+}
+
+/* Tabela com scroll vertical — thead e tfoot fixos */
+.table-scrollable {
+    max-height: calc(100vh - 160px);
+    overflow: auto; /* único elemento com overflow — necessário para sticky funcionar */
+}
+
+.table-scrollable thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+.table-scrollable thead th {
+    background-color: #f8f9fa;
+}
+
+/* Segunda linha do thead (filtros) */
+.table-scrollable thead tr:nth-child(2) td {
+    background-color: #f1f5f9;
+}
+
+.table-scrollable tfoot {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+}
+
+.table-scrollable tfoot td {
+    background-color: #f8f9fa;
+}

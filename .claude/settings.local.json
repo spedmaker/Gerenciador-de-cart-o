@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php --version)",
+      "Bash(composer --version)",
+      "Bash(php -m)",
+      "Bash(composer create-project *)",
+      "Bash(composer require *)",
+      "Bash(npm install *)",
+      "Bash(php artisan *)",
+      "Bash(npm run *)",
+      "Skill(run)",
+      "Bash(mongod --version)",
+      "Bash(systemctl status *)",
+      "Bash(service mongod *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/)",
+      "Bash(npx playwright *)",
+      "Bash(PLAYWRIGHT_BROWSERS_PATH=/home/user/.cache/ms-playwright npx playwright install chromium)",
+      "Bash(PLAYWRIGHT_BROWSERS_PATH=/home/user/.cache/ms-playwright node *)",
+      "Bash(sudo apt-get install -y libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2)",
+      "Bash(apt-get install *)",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(kill 1102)",
+      "Bash(curl -s -c /tmp/sb_cookies.txt http://localhost:8000/category-rules)",
+      "Bash(curl -s -b /tmp/sb3.txt \"http://localhost:8000/statements/6a400586316c71df69065f69\")",
+      "Bash(curl -s -b /tmp/sb3.txt http://localhost:8000/)",
+      "Bash(grep -o 'ALL_TXS = \\\\[.\\\\{0,200\\\\}')",
+      "Bash(curl -s -b /tmp/sb3.txt \"http://localhost:8000/\")",
+      "Bash(curl -s -b /tmp/cr.txt http://localhost:8000/category-rules)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/transactions)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/transactions?competencia=2026-05\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/statements)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/\")",
+      "Bash(curl -s -w \"\\\\n%{http_code}\\\\nLocation: %{redirect_url}\" http://localhost:8000/statements/6a400586316c71df69065f69)",
+      "Bash(curl -s \"http://localhost:8000/transactions\")",
+      "Bash(curl -s \"http://localhost:8000/\")",
+      "Bash(curl -s \"http://localhost:8000/statements\")",
+      "Bash(curl *)",
+      "Bash(grep -v \"^$\")"
+    ]
+  }
+}
