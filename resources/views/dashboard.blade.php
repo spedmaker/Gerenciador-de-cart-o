@@ -107,7 +107,8 @@
 
 <script type="module">
 const ALL_TXS    = @json(json_decode($txsJson));
-const ACTIVE_MONTH = '{{ $month }}'; // "YYYY-MM" or ""
+const NET_TOTAL  = {{ $netTotal }};
+const ACTIVE_MONTH = '{{ $month }}';
 
 const COLORS = {
     'Mercado':      '#198754',
@@ -123,7 +124,7 @@ const COLORS = {
 };
 const PALETTE = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#14b8a6','#f97316','#84cc16'];
 function colorFor(cat, idx) { return COLORS[cat] ?? PALETTE[idx % PALETTE.length]; }
-function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function formatarReal(v) { return 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 
 // ---- Build holder filter buttons ----
 const holders = [...new Set(ALL_TXS.map(t => t.card_holder))].sort();
@@ -166,17 +167,19 @@ function installmentGroups(txs) {
 }
 
 function render() {
-    const txs   = filtered();
-    const cats  = groupByCategory(txs);
-    const total = cats.reduce((s, c) => s + c.amt, 0);
+    const txs    = filtered();
+    const cats   = groupByCategory(txs);
+    const total  = activeHolder
+        ? cats.reduce((s, c) => s + c.amt, 0) // filtrado por portador: soma dos débitos visíveis
+        : NET_TOTAL;                            // sem filtro: total líquido do backend
     const labels = cats.map(c => c.cat);
     const data   = cats.map(c => c.amt);
     const colors = cats.map((c, i) => colorFor(c.cat, i));
 
-    document.getElementById('cardTotal').textContent = fmt(total);
-    document.getElementById('cardCount').textContent = txs.length;
-    document.getElementById('cardCats').textContent  = cats.length;
-    document.getElementById('donutTotal').textContent = fmt(total);
+    document.getElementById('cardTotal').textContent  = formatarReal(total);
+    document.getElementById('cardCount').textContent  = txs.length;
+    document.getElementById('cardCats').textContent   = cats.length;
+    document.getElementById('donutTotal').textContent = formatarReal(total);
 
     if (chart) {
         chart.data.labels = labels;
@@ -195,7 +198,7 @@ function render() {
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        callbacks: { label: ctx => ` ${ctx.label}: ${fmt(ctx.parsed)}` }
+                        callbacks: { label: ctx => ` ${ctx.label}: ${formatarReal(ctx.parsed)}` }
                     }
                 },
                 onClick(e, elements) {
@@ -215,7 +218,7 @@ function render() {
                     <span style="width:10px;height:10px;border-radius:2px;background:${colors[i]};display:inline-block"></span>
                     ${c.cat}
                 </span>
-                <span class="fw-semibold">${fmt(c.amt)}</span>
+                <span class="fw-semibold">${formatarReal(c.amt)}</span>
             </div>
             <div class="progress" style="height:5px">
                 <div class="progress-bar" style="width:${(c.amt/max*100).toFixed(1)}%;background:${colors[i]}"></div>
@@ -237,7 +240,7 @@ function render() {
                     <span class="badge bg-secondary" style="font-size:.7rem">
                         ${g.installment?.current ?? '?'}/${g.installment?.total ?? '?'}
                     </span>
-                    <span class="small fw-semibold">${fmt(g.amount)}</span>
+                    <span class="small fw-semibold">${formatarReal(g.amount)}</span>
                 </div>
             </div>
         `).join('')

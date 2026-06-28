@@ -18,6 +18,8 @@ return new class extends Migration
         ['pattern' => 'Wellhub|Gympass',                                             'category' => 'Produtos academia'],
         ['pattern' => 'PIZZARIA|lanchonete|BURGER KING|LIVORNO',                    'category' => 'Refeição'],
         ['pattern' => 'UBER|99POP|TAXI|ONIBUS|METRO|BILHETE|UBERRIDES|CABIFY|BUSER', 'category' => 'Transporte'],
+        ['pattern' => '', 'category' => 'Outros'],
+        ['pattern' => '', 'category' => 'Taxas'],
     ];
 
     public function up(): void

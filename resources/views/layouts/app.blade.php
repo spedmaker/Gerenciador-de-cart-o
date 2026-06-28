@@ -46,6 +46,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('super-dashboard') }}"
+                   class="nav-link {{ request()->routeIs('super-dashboard*') ? 'active' : '' }}">
+                    Super Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('category-rules.index') }}"
                    class="nav-link {{ request()->routeIs('category-rules.*') ? 'active' : '' }}">
                     Regras

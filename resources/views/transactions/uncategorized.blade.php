@@ -62,6 +62,7 @@
                         <th>Data</th>
                         <th>Portador</th>
                         <th>Descrição</th>
+                        <th>Parcela</th>
                         <th class="text-end">Valor</th>
                         <th>Categoria</th>
                     </tr>
@@ -78,6 +79,7 @@
                         <td>
                             <input type="text" class="form-control form-control-sm f-desc" placeholder="Buscar…">
                         </td>
+                        <td></td>
                         <td>
                             <div class="d-flex gap-1">
                                 <input type="number" class="form-control form-control-sm f-min" placeholder="Mín" step="0.01">
@@ -104,6 +106,13 @@
                         <td>{{ $dateStr ?: '–' }}</td>
                         <td class="small text-muted">{{ $tx->card_holder }}</td>
                         <td>{{ $tx->description }}</td>
+                        <td>
+                            @if($tx->installment)
+                                <span class="badge bg-info text-dark">
+                                    {{ $tx->installment['current'] }}/{{ $tx->installment['total'] }}
+                                </span>
+                            @endif
+                        </td>
                         <td class="text-end">R$ {{ number_format($absAmt, 2, ',', '.') }}</td>
                         <td>
                             <select class="form-select form-select-sm category-select" data-id="{{ $tx->id }}">

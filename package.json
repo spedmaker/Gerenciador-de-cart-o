@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.8",
+        "apexcharts": "^5.15.2",
         "bootstrap": "^5.3.8",
         "chart.js": "^4.5.1",
         "jquery": "^4.0.0",

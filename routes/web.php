@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryRuleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StatementController;
+use App\Http\Controllers\SuperDashboardController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::patch('transactions/{id}/category', [TransactionController::class, 'updat
     ->name('transactions.update-category');
 Route::get('transactions/uncategorized', [TransactionController::class, 'uncategorized'])
     ->name('transactions.uncategorized');
+
+Route::get('super-dashboard', [SuperDashboardController::class, 'index'])->name('super-dashboard');
+Route::get('super-dashboard/data', [SuperDashboardController::class, 'data'])->name('super-dashboard.data');
 
 Route::get('category-rules', [CategoryRuleController::class, 'index'])->name('category-rules.index');
 Route::post('category-rules', [CategoryRuleController::class, 'store'])->name('category-rules.store');

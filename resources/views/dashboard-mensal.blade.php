@@ -56,6 +56,9 @@
             <tr>
                 <th>Competência</th>
                 <th class="text-end">Total (R$)</th>
+                <th class="text-end">À vista</th>
+                <th class="text-end">Parcelado</th>
+                <th class="text-end">Estornos</th>
                 <th class="text-end">Variação</th>
                 <th></th>
             </tr>
@@ -69,7 +72,7 @@
 <script type="module">
 const POINTS = @json($points);
 
-function fmt(v) {
+function formatarReal(v) {
     return 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
@@ -86,12 +89,12 @@ if (!POINTS.length) {
     const avg    = data.reduce((a, b) => a + b, 0) / data.length;
     const total  = data.reduce((a, b) => a + b, 0);
 
-    document.getElementById('cardMin').textContent      = fmt(data[minIdx]);
+    document.getElementById('cardMin').textContent      = formatarReal(data[minIdx]);
     document.getElementById('cardMinMonth').textContent = labels[minIdx];
-    document.getElementById('cardMax').textContent      = fmt(data[maxIdx]);
+    document.getElementById('cardMax').textContent      = formatarReal(data[maxIdx]);
     document.getElementById('cardMaxMonth').textContent = labels[maxIdx];
-    document.getElementById('cardAvg').textContent      = fmt(avg);
-    document.getElementById('cardTotal').textContent    = fmt(total);
+    document.getElementById('cardAvg').textContent      = formatarReal(avg);
+    document.getElementById('cardTotal').textContent    = formatarReal(total);
 
     // ---- Tabela ----
     document.getElementById('summaryTable').innerHTML = POINTS.map((p, i) => {
@@ -101,13 +104,16 @@ if (!POINTS.length) {
         const up        = diff > 0;
         const varHtml   = diff !== null
             ? `<span class="${up ? 'text-danger' : 'text-success'}">
-                ${up ? '▲' : '▼'} ${fmt(Math.abs(diff))} (${pct}%)
+                ${up ? '▲' : '▼'} ${formatarReal(Math.abs(diff))} (${pct}%)
                </span>`
             : '<span class="text-muted">–</span>';
 
         return `<tr>
             <td class="fw-semibold">${p.label}</td>
-            <td class="text-end">${fmt(p.total)}</td>
+            <td class="text-end">${formatarReal(p.total)}</td>
+            <td class="text-end text-success">${formatarReal(p.vista)}</td>
+            <td class="text-end text-purple">${formatarReal(p.parcelado)}</td>
+            <td class="text-end text-info">${p.estornos > 0 ? formatarReal(p.estornos) : '–'}</td>
             <td class="text-end small">${varHtml}</td>
             <td class="text-end">
                 <a href="/transactions?competencia=${p.month}"
@@ -117,31 +123,62 @@ if (!POINTS.length) {
     }).join('');
 
     // ---- Gráfico de linha ----
+    const dataVista     = POINTS.map(p => p.vista);
+    const dataParcelado = POINTS.map(p => p.parcelado);
+
     new Chart(document.getElementById('lineChart'), {
         type: 'line',
         data: {
             labels,
-            datasets: [{
-                label: 'Total da fatura (R$)',
-                data,
-                borderColor: '#dc3545',
-                backgroundColor: 'rgba(220,53,69,.08)',
-                borderWidth: 2.5,
-                pointBackgroundColor: '#dc3545',
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                fill: true,
-                tension: 0.3,
-            }]
+            datasets: [
+                {
+                    label: 'Total da fatura',
+                    data,
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220,53,69,.08)',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#dc3545',
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: true,
+                    tension: 0.3,
+                },
+                {
+                    label: 'À vista',
+                    data: dataVista,
+                    borderColor: '#10b981',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#10b981',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: false,
+                    tension: 0.3,
+                    borderDash: [],
+                },
+                {
+                    label: 'Parcelado',
+                    data: dataParcelado,
+                    borderColor: '#6610f2',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#6610f2',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: false,
+                    tension: 0.3,
+                    borderDash: [5, 4],
+                },
+            ]
         },
         options: {
             responsive: true,
             interaction: { mode: 'index', intersect: false },
             plugins: {
-                legend: { display: false },
+                legend: { display: true, position: 'top' },
                 tooltip: {
                     callbacks: {
-                        label: ctx => ' ' + fmt(ctx.parsed.y)
+                        label: ctx => ` ${ctx.dataset.label}: ${formatarReal(ctx.parsed.y)}`
                     }
                 }
             },

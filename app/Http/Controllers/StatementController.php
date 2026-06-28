@@ -119,10 +119,10 @@ class StatementController extends Controller
         // Only touch uncategorized transactions — preserve manual edits
         Transaction::where('statement_id', $statement->id)
             ->where('is_payment', false)
-            ->whereNull('category')
+            ->whereIn('category', [null, 'Não categorizado'])
             ->each(function ($tx) use ($categorizer, &$updated) {
                 $newCategory = $categorizer->categorize($tx->description);
-                if ($newCategory) {
+                if ($newCategory !== 'Não categorizado') {
                     $tx->category = $newCategory;
                     $tx->save();
                     $updated++;
